@@ -13,21 +13,37 @@ describe GildedRose do
       item
     end
 
-    it "updates items correctly" do
-      expect(subject(Item.new(name="+5 Dexterity Vest", sell_in=10, quality=20)).quality).to eq(19)
-      expect(subject(Item.new(name="Aged Brie", sell_in=2, quality=0)).quality).to eq(1)
-      expect(subject(Item.new(name="Elixir of the Mongoose", sell_in=5, quality=7)).quality).to eq(6)
-      expect(subject(Item.new(name="Sulfuras, Hand of Ragnaros", sell_in=0, quality=80)).quality).to eq(80)
-      expect(subject(Item.new(name="Sulfuras, Hand of Ragnaros", sell_in=-1, quality=80)).quality).to eq(80)
-      expect(subject(Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=15, quality=20)).quality).to eq(21)
-      expect(subject(Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=10, quality=40)).quality).to eq(42)
-      expect(subject(Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=10, quality=49)).quality).to eq(50)
-      expect(subject(Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=5, quality=40)).quality).to eq(43)
-      expect(subject(Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=0, quality=40)).quality).to eq(0)
+    it "updates item's sell-in correctly" do
+      expect(subject(Item.new("+5 Dexterity Vest", 10, 20)).sell_in).to eq(9)
+      expect(subject(Item.new("+5 Dexterity Vest", 9, 20)).sell_in).to eq(8)
+      expect(subject(Item.new("+5 Dexterity Vest", 0, 20)).sell_in).to eq(0)
+      expect(subject(Item.new("+5 Dexterity Vest", -1, 20)).sell_in).to eq(0)
+
+      expect(subject(Item.new("Sulfuras, Hand of Ragnaros", 3, 1)).sell_in).to eq(3)
+      expect(subject(Item.new("Sulfuras, Hand of Ragnaros", 5000, 80)).sell_in).to eq(5000)
     end
 
-    it "decreases Conjured Mana Cake by 2 every day" do
-      expect(subject(Item.new(name="Conjured Mana Cake", sell_in=3, quality=6)).quality).to eq(4)
+    it "updates item's quality correctly" do
+      expect(subject(Item.new("+5 Dexterity Vest", 0, 20)).quality).to eq(18)
+      expect(subject(Item.new("+5 Dexterity Vest", 10, 20)).quality).to eq(19)
+      expect(subject(Item.new("Elixir of the Mongoose", 5, 7)).quality).to eq(6)
+
+      expect(subject(Item.new("Aged Brie", 2, 0)).quality).to eq(1)
+
+      expect(subject(Item.new("Backstage passes to a TAFKAL80ETC concert", 15, 20)).quality).to eq(21)
+      expect(subject(Item.new("Backstage passes to a TAFKAL80ETC concert", 10, 40)).quality).to eq(42)
+      expect(subject(Item.new("Backstage passes to a TAFKAL80ETC concert", 10, 49)).quality).to eq(50)
+      expect(subject(Item.new("Backstage passes to a TAFKAL80ETC concert", 5, 40)).quality).to eq(43)
+      expect(subject(Item.new("Backstage passes to a TAFKAL80ETC concert", 0, 40)).quality).to eq(0)
+
+      expect(subject(Item.new("Sulfuras, Hand of Ragnaros", 5000, 80)).quality).to eq(80)
+      expect(subject(Item.new("Sulfuras, Hand of Ragnaros", 0, 80)).quality).to eq(80)
+      expect(subject(Item.new("Sulfuras, Hand of Ragnaros", -1, 80)).quality).to eq(80)
+      expect(subject(Item.new("Sulfuras, Hand of Ragnaros", -1, 81)).quality).to eq(80)
+
+      expect(subject(Item.new("Conjured Mana Cake", 0, 6)).quality).to eq(2)
+      expect(subject(Item.new("Conjured Mana Cake", 3, 6)).quality).to eq(4)
+      expect(subject(Item.new("Conjured Mana Cake", 3, 1)).quality).to eq(0)
     end
   end
 end

@@ -1,56 +1,29 @@
+require_relative 'specialized_item'
+require_relative 'aged_brie'
+require_relative 'backstage_pass'
+require_relative 'conjured_mana_cake'
+require_relative 'sulfuras'
+
 class GildedRose
 
   def initialize(items)
     @items = items
   end
 
-  def update_quality()
+  NAME_TO_CLASS_MAP = Hash.new(SpecializedItem).merge({
+     "Conjured Mana Cake" => ::ConjuredManaCake,
+     "Aged Brie" => ::AgedBrie,
+     "Sulfuras, Hand of Ragnaros" => ::Sulfuras,
+     "Backstage passes to a TAFKAL80ETC concert" => ::BackstagePass,
+    })
+
+  def specialize(item)
+    NAME_TO_CLASS_MAP[item.name].new(item)
+  end
+
+  def update_quality
     @items.each do |item|
-      if item.name == "Conjured Mana Cake"
-        item.quality = [0, [50, item.quality - 2].min].max
-      elsif item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert"
-        if item.quality > 0
-          if item.name != "Sulfuras, Hand of Ragnaros"
-            item.quality = item.quality - 1
-          end
-        end
-      else
-        if item.quality < 50
-          item.quality = item.quality + 1
-          if item.name == "Backstage passes to a TAFKAL80ETC concert"
-            if item.sell_in < 11
-              if item.quality < 50
-                item.quality = item.quality + 1
-              end
-            end
-            if item.sell_in < 6
-              if item.quality < 50
-                item.quality = item.quality + 1
-              end
-            end
-          end
-        end
-      end
-      if item.name != "Sulfuras, Hand of Ragnaros"
-        item.sell_in = item.sell_in - 1
-      end
-      if item.sell_in < 0
-        if item.name != "Aged Brie"
-          if item.name != "Backstage passes to a TAFKAL80ETC concert"
-            if item.quality > 0
-              if item.name != "Sulfuras, Hand of Ragnaros"
-                item.quality = item.quality - 1
-              end
-            end
-          else
-            item.quality = item.quality - item.quality
-          end
-        else
-          if item.quality < 50
-            item.quality = item.quality + 1
-          end
-        end
-      end
+      specialize(item).update_quality
     end
   end
 end
