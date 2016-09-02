@@ -26,7 +26,7 @@ describe GildedRose do
       expect(subject(Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=0, quality=40)).quality).to eq(0)
     end
 
-    xit "decreases Conjured Mana Cake by 2 every day" do
+    it "decreases Conjured Mana Cake by 2 every day" do
       expect(subject(Item.new(name="Conjured Mana Cake", sell_in=3, quality=6)).quality).to eq(4)
     end
   end
